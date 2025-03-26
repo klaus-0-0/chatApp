@@ -1,0 +1,138 @@
+/* General styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+/* Login Box */
+.login-box {
+  background-color: #1f2937;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 300px;
+}
+
+.input-field {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #374151;
+  color: white;
+}
+
+.join-button {
+  background-color: #4f46e5;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.join-button:hover {
+  background-color: #4338ca;
+}
+
+/* Chat Area */
+.chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+.chat-box {
+  background-color: #1f2937;
+  padding: 15px;
+  border-radius: 8px;
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.message-item {
+  background-color: #374151;
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+/* Input and Button */
+.input-container {
+  display: flex;
+  width: 100%;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #374151;
+  color: white;
+}
+
+.chat-send-button {
+  background-color: #10b981;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.chat-send-button:hover {
+  background-color: #059669;
+}
+
+/* Users List */
+.users-list {
+  background-color: #1f2937;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.user-item {
+  padding: 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #374151;
+}
+
+.user-item:hover {
+  background-color: #374151;
+}
+
+/* Toggle Button */
+.toggle-button {
+  background-color: #f59e0b;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.toggle-button:hover {
+  background-color: #d97706;
+}
