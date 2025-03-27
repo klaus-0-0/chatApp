@@ -1,8 +1,8 @@
 {
   "scripts": {
   "setup": "npx prisma generate && npx prisma migrate deploy",
-  "start": "npx nodemon main/index.js"
-},
+  "start": "npm run setup && npx nodemon main/index.js"
+}
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "bcrypt": "^5.1.1",
