@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* 🔵 Blue Glowing Effect */
+  @keyframes glow-blue {
+    0% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+    100% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+  }
+  .animate-glow-blue {
+    animation: glow-blue 1.5s infinite alternate ease-in-out;
+  }
+
+  /* 🟢 Green Glowing Effect */
+  @keyframes glow-green {
+    0% { box-shadow: 0 0 10px rgba(59, 246, 215, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(59, 246, 165, 0.8); }
+    100% { box-shadow: 0 0 10px rgba(59, 246, 153, 0.5); }
+  }
+  .animate-glow-green {
+    animation: glow-green 1.5s infinite alternate ease-in-out;
+  }
+
+
+/* 🔴 Red Glowing Effect */
+@keyframes glow-red {
+  0% { box-shadow: 0 0 10px rgba(246, 59, 59, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(246, 59, 59, 0.8); }
+  100% { box-shadow: 0 0 10px rgba(246, 59, 59, 0.5); }
+}
+
+.animate-glow-red {
+  animation: glow-red 1.5s infinite alternate ease-in-out;
+}
+
+
+
+
+  /* 🌟 Expand Effect */
+  @keyframes expand {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .animate-expand {
+    animation: expand 0.3s ease-out forwards;
+  }
+
+  /* ⬇️ Falling Effect */
+  @keyframes fall {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(150px); opacity: 0; }
+  }
+  .animate-fall {
+    animation: fall 0.7s ease-in forwards;
+  }
+}
+
+
+
+/* Remove autofill background */
+/* Autofill background transparent & text white */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    background-color: transparent !important;
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+

@@ -1,0 +1,204 @@
+  /* App.css */
+
+  :root {
+    --primary-bg: #202c33;
+    --secondary-bg: rgb(43, 82, 100);
+    --text-color: white;
+    --button-bg: indigo;
+    --button-hover-bg: darken(indigo, 10%);
+  }
+  
+  .root {
+    background-color: black; /* This will keep your background black */
+  }
+
+  
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    align-items: center;
+  }
+
+  .chat-box {
+    background-color: rgb(43, 82, 100);
+    border: 1px solid gray;
+    margin-left: 28.5%;
+    /* padding: 16px; */
+    margin-top: -0.9%;
+    /* border-radius: 8px; */
+    width: 100%;
+    max-width: 900px;
+    height: 540px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+  }
+
+  .chat-bar {
+    padding: 30px;
+    background-color: #202c33;
+  }
+
+  .chat-input {
+    position: relative;
+    top: -16px;
+    right: -296px;
+    height: 77px;
+    width: 868px;
+    background-color: #202c33;
+    color: white;
+    /* left: 400px; */
+    /* border: 1px solid gray; */
+    /* padding: 8px; */
+    /* border-radius: 8px; */
+  }
+
+  .chat-send-button {
+    position: relative;
+    right: -220px;
+    top: -12px;
+    margin-left: 8px;
+    padding: 8px 16px;
+    background-color: indigo;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .chat-send-button:hover {
+    background-color: darken(indigo, 10%);
+  }
+
+  .top-button {
+    padding: 8px 16px;
+    margin-top: 10px;
+    background-color: grey;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .appbar {
+    width: 200px;
+    background-color: #111b21;
+    color: aliceblue;
+    padding: 161px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 1;
+    /* Lower z-index to be under the strip */
+  }
+
+  .strip {
+    width: 50px;
+    /* border: 10px solid brown;  */
+    background-color: #202c33;
+    color: aliceblue;
+    padding: 12px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 2;
+    /* Higher z-index to be on top of the appbar */
+    animation-duration: o.3s;
+  }
+
+  .chats {
+    position: relative;
+    top: -30%;
+    left: -30%;
+    color: rgb(255, 255, 255);
+  }
+
+  .search {
+    position: relative;
+    top: -30%;
+    left: -30%;
+    width: 400px;
+    background-color: #202c33;
+    height: 30px;
+    border-radius: 50px;
+    color: rgb(255, 255, 255);
+    text-align: left;
+  }
+
+  .all {
+    position: relative;
+    top: -28%;
+    left: -30%;
+    width: 80px;
+    background-color: #202c33;
+    height: 30px;
+    border-radius: 20px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    margin-right: 4px; /* Add a 4px gap to the right of the .all button */
+  }
+  
+  .groups {
+    position: relative;
+    top: -28%;
+    left: -30%;
+    width: 80px;
+    background-color: #202c33;
+    height: 30px;
+    border-radius: 20px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    margin-bottom: 4px; /* Add a 4px gap below the .groups button */
+  }
+
+  .user{
+    position: relative;
+    background-color: #202c33;
+    width: 230%;
+    top: -23%;
+    left: -43%;
+  }
+
+  .tanya {
+    position: relative;
+    background-color: #202c33;
+    width: 230%;
+    top: -38%;
+    left: 15%;  }
+  
+  .user-profile {
+    position: relative;
+    right: 0px;
+    width: 70px;
+    height: 70px;
+    background-color: #ffffff;
+    color: rgb(255, 255, 255);
+    border-radius: 50%; /* Make the button round */
+    cursor: pointer;
+  }
+  
+  /* .chat-image {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto; 
+  } */
+
+  .messages {
+    position: relative;
+    right: -50px;
+    overflow: hidden;
+    top: 70%;
+    color: white;
+  }
+
+
+  @media (max-width: 768px) {
+    
+  }
