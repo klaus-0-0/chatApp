@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import config from "../config";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Login = () => {
     setError(""); // Reset error before making request
 
     try {
-      const { data } = await axios.post("http://localhost:3000/auth/login", {
+      const { data } = await axios.post(`${config.apiUrl}/auth/login`, {
         email,
         password,
       });

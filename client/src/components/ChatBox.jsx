@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 import Picker from "emoji-picker-react";
 import chatImg from "../assets/hello.svg";
 import axios from "axios";
+import config from "../config";
 
 function ChatBox() {
   const socketRef = useRef(null);
@@ -27,7 +28,7 @@ function ChatBox() {
         setUsername(userInfo.user.username || "");
         setEmail(userInfo.user.email);
 
-        const response = await axios.get("http://localhost:3000/users");
+        const response = await axios.get(`${config.apiUrl}/users`);
         setPeoples(response.data);
       } catch (error) {
         console.error("❌ Error fetching users:", error);
@@ -40,7 +41,7 @@ function ChatBox() {
   useEffect(() => {
     if (!email) return;
 
-    socketRef.current = io("http://localhost:3000");
+    socketRef.current = io(`${config.apiUrl}`);
 
     socketRef.current.on("userList", (userList) => {
       console.log("📢 Updated User List:", userList);
@@ -56,7 +57,7 @@ function ChatBox() {
 
   const fetchMessages = async (user) => {
     try {
-      const response = await axios.get(`http://localhost:3000/messages/${email}/${user}`);
+      const response = await axios.get(`${config.apiUrl}/messages/${email}/${user}`);
       setMessages(response.data);
       console.log(`✅ Fetched chat history with ${user}:`, response.data);
     } catch (error) {

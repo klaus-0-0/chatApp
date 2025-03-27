@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import config from '../config';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Signup = () => {
             setLoading(true);
             setError(''); // Reset error
 
-            const response = await axios.post('http://localhost:3000/auth/signup', {
+            const response = await axios.post(`${config.apiUrl}/auth/signup`, {
                 username,
                 email,
                 password,

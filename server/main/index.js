@@ -16,7 +16,7 @@ console.log("Database URL:", process.env.DATABASE_URL);
 app.use(express.json());
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://text-t.onrender.com",
     methods: ['GET', 'POST'],
     credentials: true
 }));
@@ -26,7 +26,7 @@ app.use("/auth", registerRoute);
 
 const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:5173', 'http://localhost:5174'],
+        origin: ['https://text-t.onrender.com'],
         methods: ['GET', 'POST'],
         credentials: true
     }
