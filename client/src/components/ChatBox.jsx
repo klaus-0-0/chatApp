@@ -5,6 +5,8 @@ import Picker from "emoji-picker-react";
 import chatImg from "../assets/hello.svg";
 import axios from "axios";
 import config from "../config";
+import emoji from "../assets/emoji.png"
+import send from "../assets/send1.png"
 
 function ChatBox() {
   const socketRef = useRef(null);
@@ -141,13 +143,13 @@ function ChatBox() {
             </div>
           )}
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md h-80 overflow-auto">
+          <div className="bg-gray-800 p-4 rounded-lg shadow-md h-80 overflow-auto bg-transparent border border-white">
             {Array.isArray(messages) &&
               messages.map((msg, index) => (
                 <p
                   key={index} // ✅ Add a unique key
                   className={`text-sm mb-2 p-2 rounded-lg max-w-xs 
-          ${msg.sender === email ? "bg-green-600 ml-auto text-right" : "bg-gray-700 text-left"}
+          ${msg.sender === email ? "bg-green-700 ml-auto text-right" : "bg-gray-700 text-left"}
         `}
                 >
                   <strong>{msg.sender === email ? "You" : msg.sender}:</strong> {msg.message}
@@ -157,21 +159,26 @@ function ChatBox() {
 
           <div className="flex gap-2 relative">
             <input
-              className="flex-grow p-2 border rounded bg-gray-700 text-white"
+              className="flex-grow p-2 border-b-2 border-gray-400 bg-transparent text-white outline-none focus:border-green-400"
               placeholder="Type a message..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
-            <button className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
-              😀
+
+            <button
+              className="px-4 py-2 bg-yellow-0 hover:bg-yellow-700 rounded"
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            >
+              <img src={emoji} className="w-12 h-12" alt="emoji picker" />
             </button>
+
             {showEmojiPicker && (
               <div className="absolute bottom-12 right-0 bg-gray-800 rounded-lg shadow-lg">
                 <Picker onEmojiClick={onEmojiClick} />
               </div>
             )}
-            <button className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded" onClick={sendMessage}>
-              Send
+            <button className=" bg-green-0 hover:bg-green-700 rounded" onClick={sendMessage}>
+              <img src={send} className="w-12 h-12" alt="emoji picker" />
             </button>
           </div>
           <ul className="mt-2">
