@@ -1,4 +1,11 @@
 {
+    "scripts": {
+    "start": "node main/index.js",
+    "dev": "nodemon main/index.js",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate deploy",
+    "setup": "npm run generate && npm run migrate && npm run start"
+  },
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "bcrypt": "^5.1.1",
