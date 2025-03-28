@@ -22,7 +22,7 @@ const Login = () => {
 
       localStorage.setItem("user-info", JSON.stringify(data));
 
-      setTimeout(() => navigate("/chatbox"), 1500);
+      setTimeout(() => navigate("/TestingUi"), 1500);
     } catch (error) {
       setError("Login Failed! Please check your credentials.");
       setLoading(false);

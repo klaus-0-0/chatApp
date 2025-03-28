@@ -35,7 +35,7 @@ const Signup = () => {
             localStorage.setItem('user-info', JSON.stringify(response.data));
 
             setSuccess(true); // Mark success (this will trigger falling animation)
-            setTimeout(() => navigate('/chatbox'), 2000); // Navigate after animation
+            setTimeout(() => navigate('/TestingUi'), 2000); // Navigate after animation
         } catch (err) {
             setError('Signup failed / User already exists');
             setClicked(false);
