@@ -1,10 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
-    historyApiFallback: true, // ✅ Ensures index.html is served for all routes
+    historyApiFallback: true, // ✅ Fixes SPA refresh issue in dev mode
+  },
+  build: {
+    outDir: 'dist', // ✅ Ensures build files go into "dist"
+  },
+  preview: {
+    port: 4173, // ✅ Set preview port
   }
 });
