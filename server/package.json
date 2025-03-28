@@ -1,10 +1,7 @@
 {
   "scripts": {
-    "start": "node main/index.js",
-    "dev": "nodemon main/index.js",
-    "generate": "prisma generate",
-    "migrate": "prisma migrate deploy",
-    "setup": "npm run generate && npm run migrate && npm run start"
+    "setup": "npx prisma generate && npx prisma migrate deploy",
+    "start": "npm run setup && npx nodemon main/index.js"
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
@@ -15,6 +12,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.1.9",
+    "path": "^0.12.7",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
