@@ -38,17 +38,17 @@ const io = new Server(server, {
 app.use(express.static(path.join(__dirname, "client/dist")));
 
 //  Catch all routes and serve index.html
-app.get("*", (req, res) => {
-    res.redirect("https://text-t.onrender.com");
-});
-
-// //  Serve static files
-// app.use(express.static(path.join(__dirname, "client/dist")));
-
-// //  Catch all routes and serve index.html
 // app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "client/dist", "index.html"));
+//     res.redirect("https://text-t.onrender.com");
 // });
+
+//  Serve static files
+app.use(express.static(path.join(__dirname, "client/dist")));
+
+//  Catch all routes and serve index.html
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client/dist", "index.html"));
+});
 
 
 app.get("/users", async (req, res) => {
