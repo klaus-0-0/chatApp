@@ -1,10 +1,11 @@
-require('dotenv').config(); 
+require('dotenv').config();
 const express = require('express');
 const { Server } = require('socket.io');
 const http = require('http');
 const cors = require('cors');
 const registerRoute = require('./register'); // Import signup/login routes
 const { PrismaClient } = require('@prisma/client');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
@@ -31,6 +32,15 @@ const io = new Server(server, {
         credentials: true
     }
 });
+
+//  Serve static files
+app.use(express.static(path.join(__dirname, "client/dist")));
+
+//  Catch all routes and serve index.html
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client/dist", "index.html"));
+});
+
 
 app.get("/users", async (req, res) => {
     try {

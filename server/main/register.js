@@ -21,11 +21,11 @@ router.post("/signup", async (req, res) => {
     } 
 
     // Hash the password
-    // const hashedPassword = await bcrypt.hash(password, 10);  : hashedPassword
+    const hashedPassword = await bcrypt.hash(password, 10);
  
     // Save user to the database
     const newUser = await prisma.user.create({
-      data: { username, email, password },
+      data: { username, email, password: hashedPassword },
     });
 
     res.status(201).json({ message: 'User registered successfully', user: newUser });
@@ -45,8 +45,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'User not found' });
     }
 
-    // const isPasswordValid = await bcrypt.compare(password, user.password);
-    const isPasswordValid = await password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ error: 'Invalid password' });
     }
