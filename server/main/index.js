@@ -7,7 +7,6 @@ const cors = require('cors');
 const registerRoute = require('./register'); // Import signup/login routes
 const { PrismaClient } = require('@prisma/client');
 const path = require('path');
-const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
