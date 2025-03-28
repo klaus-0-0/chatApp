@@ -40,9 +40,8 @@ app.use(express.static(path.join(__dirname, "client/dist")));
 //  Catch all routes and serve index.html
 //  Serve `index.html` for all unmatched routes (SPA fix)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
-
 
 //  Serve static files
 app.use(express.static(path.join(__dirname, "client/dist")));
