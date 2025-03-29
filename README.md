@@ -1,7 +1,4 @@
-1️⃣ Project Title & Description
-md
-Copy
-Edit
+
 # ChatApp
 A real-time chat application using React, Express, Socket.io, and Prisma.
 2️⃣ Features
