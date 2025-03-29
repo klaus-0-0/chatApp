@@ -34,20 +34,19 @@ const io = new Server(server, {
     }
 });
 
-// //  Serve static files
-// app.use(express.static(path.join(__dirname, "client/dist")));
+// ✅ Correct path for serving frontend build
+const clientBuildPath = path.join(__dirname, "../client/dist");
+console.log("Serving static files from:", clientBuildPath);
 
-// //  Catch all routes and serve index.html
-// app.get("*", (req, res) => {
-//     res.redirect("https://text-t.onrender.com");
-// });
+// ✅ Serve frontend files
+app.use(express.static(clientBuildPath));
 
-//  Serve static files
-app.use(express.static(path.join(__dirname, "../client/dist")));
+// ✅ API Routes (define them first)
+app.use("/auth", require("./authRoutes")); // Example API route
 
-//  Catch all routes and serve index.html
+// ✅ Catch-all route for React SPA
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+    res.sendFile(path.join(clientBuildPath, "index.html"));
 });
 
 
