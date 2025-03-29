@@ -41,9 +41,6 @@ console.log("Serving static files from:", clientBuildPath);
 // ✅ Serve frontend files
 app.use(express.static(clientBuildPath));
 
-// ✅ API Routes (define them first)
-app.use("/auth", require("./authRoutes")); // Example API route
-
 // ✅ Catch-all route for React SPA
 app.get("*", (req, res) => {
     res.sendFile(path.join(clientBuildPath, "index.html"));
