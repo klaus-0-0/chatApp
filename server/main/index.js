@@ -34,17 +34,11 @@ const io = new Server(server, {
     }
 });
 
-// ✅ Correct path for serving frontend build
-const clientBuildPath = path.join(__dirname, "../client/dist");
-console.log("Serving static files from:", clientBuildPath);
-
-// ✅ Serve frontend files
-app.use(express.static(clientBuildPath));
-
-// ✅ Catch-all route for React SPA
+app.use(express.static(path.join(__dirname, "../../client/dist")));
 app.get("*", (req, res) => {
-    res.sendFile(path.join(clientBuildPath, "index.html"));
+    res.sendFile(path.join(__dirname, "../../client/dist", "index.html"));
 });
+
 
 
 app.get("/users", async (req, res) => {
