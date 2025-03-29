@@ -6,7 +6,7 @@ const http = require('http');
 const cors = require('cors');
 const registerRoute = require('./register'); // Import signup/login routes
 const { PrismaClient } = require('@prisma/client');
-const path = require('path');
+// const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
@@ -35,7 +35,7 @@ const io = new Server(server, {
 });
 
 //  Serve static files
-app.use(express.static(path.join(__dirname, "client/dist")));
+// app.use(express.static(path.join(__dirname, "client/dist")));
 
 //  Catch all routes and serve index.html
 app.get("*", (req, res) => {
