@@ -57,4 +57,63 @@ router.post('/login', async (req, res) => {
   }
 });
 
+
+router.post('/search', async (req, res) => {
+  const { username } = req.body; // Username to search for
+
+  try {
+    // Fetch users whose username contains the input string (case-insensitive search)
+    const users = await prisma.user.findMany({
+      where: {
+        username: {
+          contains: username, // Search for usernames containing the input string
+          mode: 'insensitive', // Make the search case-insensitive
+        }
+      },
+      select: {
+        id: true, // Select user id
+        username: true, // Select username
+        email: true,
+      }
+    });
+
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'No matching users found' });
+    }
+
+    // Return the list of matching users (usernames only)
+    res.status(200).json({ message: "success", users });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+router.post('/user-details', async (req, res) => {
+  const { userId } = req.body; // User ID passed after selecting a username
+
+  try {
+    // Fetch the details of the selected user using the user ID
+    const userDetails = await prisma.user.findUnique({
+      where: {
+        id: userId, // Get the user by ID
+      },
+    });
+ 
+    if (!userDetails) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Return the details of the selected user
+    res.status(200).json({ message: "success", userDetails });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Server error' });
+  } 
+});
+
+
 module.exports = router;

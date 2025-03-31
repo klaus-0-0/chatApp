@@ -18,6 +18,7 @@ console.log("Database URL:", process.env.DATABASE_URL);
 app.use(express.json());
 
 app.use(cors({
+    // origin: "http://localhost:5173",
     origin: "https://text-t.onrender.com",
     methods: ['GET', 'POST'],
     credentials: true
@@ -34,6 +35,8 @@ const io = new Server(server, {
     }
 });
 
+
+// this is for deployment after u make build/dist so any request coming to server will get redirected to dist/ index.html so frontend will know otherwise 404 error
 app.use(express.static(path.join(__dirname, "../../client/dist")));
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../../client/dist", "index.html"));
@@ -48,7 +51,7 @@ app.get("/users", async (req, res) => {
         });
         res.json(users);
     } catch (error) {
-        console.error("❌ Error fetching users:", error);
+        console.error(" Error fetching users:", error);
         res.status(500).json({ error: "Failed to fetch users" });
     }
 });
@@ -61,7 +64,7 @@ app.get("/messages/:email/:recipient", async (req, res) => {
             return res.status(400).json({ error: "Both email and recipient are required." });
         }
 
-        console.log(`📩 Fetching messages between ${email} and ${recipient}`);
+        console.log(` Fetching messages between ${email} and ${recipient}`);
 
         const senderUser = await prisma.user.findUnique({ where: { email } });
         const recipientUser = await prisma.user.findUnique({ where: { email: recipient } });
@@ -81,7 +84,7 @@ app.get("/messages/:email/:recipient", async (req, res) => {
             include: { sender: true }
         });
 
-        console.log("✅ Messages Fetched:", messages);
+        console.log(" Messages Fetched:", messages);
 
         const formattedMessages = messages.map(msg => ({
             sender: msg.sender.email,
@@ -90,7 +93,7 @@ app.get("/messages/:email/:recipient", async (req, res) => {
 
         res.json(formattedMessages);
     } catch (error) {
-        console.error("❌ Error fetching messages:", error);
+        console.error(" Error fetching messages:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -104,7 +107,7 @@ io.on('connection', (socket) => {
         if (!username || !email) return;
         const formattedEmail = email.trim().toLowerCase();
         users[formattedEmail] = socket.id;
-        console.log(`✅ Registered: ${username} (${formattedEmail}) - Socket: ${socket.id}`);
+        console.log(` Registered: ${username} (${formattedEmail}) - Socket: ${socket.id}`);
         io.emit('userList', Object.keys(users));
     });
 
@@ -112,7 +115,7 @@ io.on('connection', (socket) => {
         try {
             const senderEmail = sender.trim().toLowerCase();
             const recipientEmail = recipient.trim().toLowerCase();
-            console.log(`📩 Attempting to send message from ${senderEmail} to ${recipientEmail}`);
+            console.log(` Attempting to send message from ${senderEmail} to ${recipientEmail}`);
 
             const recipientSocketId = users[recipientEmail];
             console.log("recipientSocketId = ", recipientSocketId);
@@ -122,16 +125,16 @@ io.on('connection', (socket) => {
                     sender: senderEmail,
                     message
                 });
-                console.log(`📤 Message sent to online user ${recipientEmail}`);
+                console.log(` Message sent to online user ${recipientEmail}`);
             } else {
-                console.log(`📥 User ${recipientEmail} is offline. Message stored.`);
+                console.log(` User ${recipientEmail} is offline. Message stored.`);
             }
 
             const senderUser = await prisma.user.findUnique({ where: { email: senderEmail } });
             const recipientUser = await prisma.user.findUnique({ where: { email: recipientEmail } });
 
             if (!senderUser || !recipientUser) {
-                console.error("❌ Error: One or both users not found in the database.");
+                console.error(" Error: One or both users not found in the database.");
                 return;
             }
 
@@ -143,9 +146,9 @@ io.on('connection', (socket) => {
                 }
             });
 
-            console.log("✅ Message saved in DB.");
+            console.log(" Message saved in DB.");
         } catch (error) {
-            console.error("❌ Error sending message:", error);
+            console.error(" Error sending message:", error);
         }
     });
 
@@ -153,7 +156,7 @@ io.on('connection', (socket) => {
         const email = Object.keys(users).find(key => users[key] === socket.id);
         if (email) {
             delete users[email];
-            console.log(`❌ ${email} disconnected.`);
+            console.log(` ${email} disconnected.`);
         }
 
         io.emit('userList', Object.keys(users));
@@ -161,5 +164,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(port, () => {
-    console.log(`🚀 Server running on port ${port}`);
+    console.log(` Server running on port ${port}`);
 });
