@@ -37,10 +37,10 @@ const io = new Server(server, {
 
 
 // this is for deployment after u make build/dist so any request coming to server will get redirected to dist/ index.html so frontend will know otherwise 404 error
-app.use(express.static(path.join(__dirname, "../../client/dist")));
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../../client/dist", "index.html"));
-});
+// app.use(express.static(path.join(__dirname, "../../client/dist")));
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "../../client/dist", "index.html"));
+// });
 
 
 
