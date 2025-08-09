@@ -11,7 +11,7 @@ import EmojiPicker from 'emoji-picker-react';
 import emojiImg from '../assets/emoji.png'
 
 
-const socket = io('http://localhost:3000', {
+const socket = io('https://chatapp-wj9f.onrender.com', {
     withCredentials: true,
 });
 
