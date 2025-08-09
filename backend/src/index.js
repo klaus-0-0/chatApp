@@ -14,7 +14,7 @@ const server = http.createServer(app);
 // Setup Socket.io server
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // frontend
+    origin: "https://text-t.onrender.com", // frontend
     methods: ['GET', 'POST', 'PATCH', 'OPTIONS'], // OPTIONS for preflight
     credentials: true,
   },
@@ -22,7 +22,7 @@ const io = new Server(server, {
 
 // Express Middleware
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://text-t.onrender.com",
   methods: ['GET', 'POST', 'PATCH', 'OPTIONS'], // OPTIONS for preflight
   credentials: true,
 }));
