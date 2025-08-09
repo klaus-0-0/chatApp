@@ -1,0 +1,21 @@
+{
+    "scripts": {
+        "build": "tsc",
+        "postinstall": "prisma generate",
+        "migrate:deploy": "prisma migrate deploy",
+        "start": "npm run migrate:deploy && node dist/index.js"
+    },
+    "dependencies": {
+        "@prisma/client": "^6.13.0",
+        "bcrypt": "^6.0.0",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.1",
+        "express": "^5.1.0",
+        "nodemon": "^3.1.10",
+        "socket.io": "^4.8.1"
+    },
+    "devDependencies": {
+        "prisma": "^6.13.0",
+        "typescript": "^5.9.2"
+    }
+}
