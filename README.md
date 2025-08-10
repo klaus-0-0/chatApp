@@ -8,7 +8,7 @@ Users can sign up, login (email/password + Google OAuth), add friends, and chat 
 
 ## 🔗 Live Demo
 
-- 🌐 Site: https: //whatsapp-32fo.onrender.com/
+- 🌐 Site: https: https://whatsapp-32fo.onrender.com/
 - 📁 GitHub Repo: https://github.com/klaus-0-0/chatApp
 
 ---
