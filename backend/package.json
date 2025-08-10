@@ -1,9 +1,9 @@
 {
-  "scripts": {
-  "postinstall": "prisma generate",
-  "migrate:deploy": "prisma migrate deploy",
-  "start": "npm run migrate:deploy && node src/index.js"
-},
+    "scripts": {
+        "postinstall": "prisma generate",
+        "migrate:deploy": "prisma migrate deploy",
+        "start": "node src/index.js"
+    },
     "dependencies": {
         "@prisma/client": "^6.13.0",
         "bcrypt": "^6.0.0",
