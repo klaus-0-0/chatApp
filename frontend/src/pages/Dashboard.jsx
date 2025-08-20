@@ -363,7 +363,7 @@ function Dashboard() {
                             >
                                 <div className="text-black font-medium bg-white p-4 rounded-lg hover:bg-gray-300 transition-colors">
                                     <p className="font-bold">{contact.username}</p>
-                                    <p className="text-sm text-gray-600">{contact.number}</p>
+{/*                                     <p className="text-sm text-gray-600">{contact.number}</p> */}
                                 </div>
                             </div>
                         ))}
