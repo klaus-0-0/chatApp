@@ -5,13 +5,12 @@ import config from '../config';
 import search from '../assets/search4.svg';
 import buttonImg from '../assets/send1.png';
 import backButton from '../assets/back3.png';
-import wall from '../assets/wall5.jpg'
+import wall from '../assets/wall5.jpg';
 import { useNavigate } from 'react-router-dom';
 import EmojiPicker from 'emoji-picker-react';
 import emojiImg from '../assets/emoji.png'
 
-
-const socket = io('http://localhost:3000', {
+const socket = io('https://chatapp-wj9f.onrender.com', {
     withCredentials: true,
 });
 
@@ -24,7 +23,6 @@ function Dashboard() {
     const [userNumber, setUserNumber] = useState('');
     const [senderId, setSenderId] = useState('');
     const [receiverId, setReceiverId] = useState('');
-
     const [filteredMessages, setFilteredMessages] = useState([]);
     const [contacts, setContacts] = useState([]);
     const [selectedContact, setSelectedContact] = useState(null);
@@ -32,7 +30,6 @@ function Dashboard() {
     const [userName, setUserName] = useState('');
     const [isMobileView, setIsMobileView] = useState(false);
     const [showChat, setShowChat] = useState(false);
-
     const messagesEndRef = useRef(null);
     const navigate = useNavigate()
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -41,15 +38,14 @@ function Dashboard() {
         setMessageInput(prev => prev + emojiData.emoji);
         setShowEmojiPicker(false);
     };
+
     // Check for mobile view
     useEffect(() => {
         const checkMobileView = () => {
             setIsMobileView(window.innerWidth < 768);
         };
-
         checkMobileView();
         window.addEventListener('resize', checkMobileView);
-
         return () => window.removeEventListener('resize', checkMobileView);
     }, []);
 
@@ -73,70 +69,61 @@ function Dashboard() {
             setMyName(name);
             setSenderId(userSnderID);
             setMyNumber(number);
-            socket.emit('joinPersonalRoom', number);
+            socket.emit('joinPersonalRoom', userSnderID);
 
             if (selectedContact) {
-                const generatedRoomId = [number, selectedContact.number].sort().join('_');
-                socket.emit('joinRoom', { from: number, to: selectedContact.number });
+                socket.emit('joinRoom', {
+                    senderId: userSnderID,
+                    receiverId: selectedContact.id
+                });
             }
-        }
-        else {
+        } else {
             navigate("/Login")
         }
     }, [selectedContact, navigate]);
 
-    // Generate room ID when myNumber or userNumber changes
+    // Generate room ID when senderId or receiverId changes
     useEffect(() => {
-        if (myNumber && userNumber) {
-            const generatedRoomId = [myNumber, userNumber].sort().join('_');
+        if (senderId && receiverId) {
+            const generatedRoomId = [senderId, receiverId].sort().join('_');
             setRoomId(generatedRoomId);
-            socket.emit('joinRoom', { from: myNumber, to: userNumber });
+            socket.emit('joinRoom', { senderId, receiverId });
         }
-    }, [myNumber, userNumber]);
+    }, [senderId, receiverId]);
 
-    // Fetch messages and contacts
+    // Fetch contacts separately
+    useEffect(() => {
+        const fetchContacts = async () => {
+            try {
+                const response = await axios.get(`${config.apiUrl}/contacts/${senderId}`);
+                console.log('Contacts:', response.data);
+                setContacts(response.data);
+            } catch (error) {
+                console.error("Error fetching contacts:", error);
+            }
+        };
+
+        if (senderId) {
+            fetchContacts();
+        }
+    }, [senderId]);
+
+    // Fetch messages
     useEffect(() => {
         const fetchMessages = async () => {
             try {
                 const response = await axios.get(`${config.apiUrl}/fetchmessages/${senderId}`);
+                console.log('Messages:', response.data);
                 setMessages(response.data);
-
-                const allContacts = response.data.reduce((acc, message) => {
-                    if (message.receiver.number !== myNumber) {
-                        acc.push({
-                            id: message.receiverId,
-                            username: message.receiver.username,
-                            number: message.receiver.number
-                        });
-                    }
-                    if (message.sender.number !== myNumber) {
-                        acc.push({
-                            id: message.senderId,
-                            username: message.sender.username,
-                            number: message.sender.number
-                        });
-                    }
-                    return acc;
-                }, []);
-
-                const uniqueContacts = allContacts.filter(
-                    (contact, index, self) =>
-                        index === self.findIndex(
-                            (c) => c.number === contact.number
-                        )
-                );
-
-                setContacts(uniqueContacts);
-
             } catch (error) {
                 console.error("Error fetching messages:", error);
             }
         };
 
-        if (senderId && myNumber) {
+        if (senderId) {
             fetchMessages();
         }
-    }, [senderId, myNumber]);
+    }, [senderId]);
 
     // Handle incoming messages and status updates
     useEffect(() => {
@@ -151,20 +138,12 @@ function Dashboard() {
                 ));
             }
 
-            if (msg.to === myNumber && msg.id) {
+            if (msg.receiverId === senderId && msg.id) {
                 socket.emit('markAsDelivered', {
                     messageId: msg.id,
-                    from: msg.from,
-                    to: msg.to,
+                    senderId: msg.senderId,
+                    receiverId: msg.receiverId,
                 });
-
-                if (selectedContact && selectedContact.number === msg.from) {
-                    socket.emit('markAsSeen', {
-                        messageId: msg.id,
-                        from: msg.from,
-                        to: msg.to,
-                    });
-                }
             }
         };
 
@@ -188,21 +167,47 @@ function Dashboard() {
             });
         };
 
+        const handleChatSeen = ({ senderId: seenSenderId, receiverId: seenReceiverId }) => {
+            setMessages(prev => prev.map(msg => {
+                if (msg.senderId === seenSenderId && msg.receiverId === seenReceiverId && msg.status !== 'seen') {
+                    return { ...msg, status: 'seen' };
+                }
+                return msg;
+            }));
+
+            setFilteredMessages(prev => prev.map(msg => {
+                if (msg.senderId === seenSenderId && msg.receiverId === seenReceiverId && msg.status !== 'seen') {
+                    return { ...msg, status: 'seen' };
+                }
+                return msg;
+            }));
+        };
+
         socket.on('chatMessage', handleIncomingMessage);
         socket.on('updateMessageStatus', handleStatusUpdate);
+        socket.on('chatSeen', handleChatSeen);
 
         return () => {
             socket.off('chatMessage', handleIncomingMessage);
             socket.off('updateMessageStatus', handleStatusUpdate);
+            socket.off('chatSeen', handleChatSeen);
         };
-    }, [myNumber, senderId, selectedContact]);
+    }, [senderId, selectedContact]);
 
     // Handle contact selection
     const handleSelectContact = useCallback((contact) => {
+        console.log('Selected contact:', contact);
+
+        if (!contact.id) {
+            console.error('Contact ID is undefined!');
+            return;
+        }
+
         setSelectedContact(contact);
         setUserNumber(contact.number);
         setReceiverId(contact.id);
         setUserName(contact.username);
+
         if (isMobileView) setShowChat(true);
 
         const conversationMessages = messages
@@ -213,11 +218,9 @@ function Dashboard() {
             .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
         setFilteredMessages(conversationMessages);
-
-        const generatedRoomId = [myNumber, contact.number].sort().join('_');
-        setRoomId(generatedRoomId);
-        socket.emit('joinRoom', { from: myNumber, to: contact.number });
-    }, [messages, senderId, myNumber, isMobileView]);
+        socket.emit('joinRoom', { senderId, receiverId: contact.id });
+        socket.emit('markChatAsSeen', { senderId: contact.id, receiverId: senderId });
+    }, [messages, senderId, isMobileView]);
 
     // Search for user by number
     const handleSearchUserNumber = async () => {
@@ -227,32 +230,44 @@ function Dashboard() {
             });
             const userData = res.data.userData;
 
+            console.log('Found user:', userData);
+
+            if (!userData || !userData.id) {
+                throw new Error('User not found or missing ID');
+            }
+
             setUserName(userData.username);
             setUserNumber(userData.number);
             setReceiverId(userData.id);
 
-            const existingContact = contacts.find(c => c.number === userData.number);
-            if (!existingContact) {
-                setContacts(prev => [...prev, {
-                    id: userData.id,
-                    username: userData.username,
-                    number: userData.number
-                }]);
-            }
-
-            handleSelectContact({
+            const newContact = {
                 id: userData.id,
                 username: userData.username,
                 number: userData.number
-            });
+            };
+
+            // Check if contact already exists
+            const existingContact = contacts.find(c => c.id === userData.id);
+            if (!existingContact) {
+                setContacts(prev => [...prev, newContact]);
+            }
+
+            handleSelectContact(newContact);
         } catch (error) {
             console.error('Error searching user number:', error);
+            alert('User not found or invalid user data');
         }
     };
 
     // Send a new message
     const handleSendMessage = async () => {
         if (!messageInput.trim()) return;
+
+        if (!receiverId) {
+            console.error('Receiver ID is missing!');
+            alert('Please select a contact first');
+            return;
+        }
 
         try {
             const res = await axios.post(`${config.apiUrl}/sendMessages`, {
@@ -267,8 +282,6 @@ function Dashboard() {
                 id: messageId,
                 senderId,
                 receiverId,
-                from: myNumber,
-                to: userNumber,
                 content: messageInput,
                 timestamp: new Date().toISOString(),
                 status: 'sent',
@@ -292,6 +305,9 @@ function Dashboard() {
             socket.emit('chatMessage', newMessage);
         } catch (err) {
             console.error('Error sending message:', err);
+            if (err.response?.data?.error) {
+                alert(err.response.data.error);
+            }
         }
     };
 
@@ -303,7 +319,6 @@ function Dashboard() {
         }
     };
 
-    // Get status icon
     const getTickIcon = (status) => {
         if (status === 'seen') {
             return <span className="text-blue-500 ml-1">✓✓</span>;
@@ -323,7 +338,7 @@ function Dashboard() {
                     <div className="flex items-center gap-2">
                         <input
                             className="w-full rounded-full p-2 px-4 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            placeholder="Search..."
+                            placeholder="Search by phone number..."
                             value={searchUserNumber}
                             onChange={(e) => setSearchUserNumber(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && handleSearchUserNumber()}
@@ -345,7 +360,10 @@ function Dashboard() {
                                 className={`p-1 mx-2 rounded-lg cursor-pointer ${selectedContact?.id === contact.id ? 'bg-gray-400' : ''}`}
                                 onClick={() => handleSelectContact(contact)}
                             >
-                                <p className="text-black font-medium bg-white p-4 rounded-lg hover:bg-gray-300 transition-colors">{contact.username}</p>
+                                <div className="text-black font-medium bg-white p-4 rounded-lg hover:bg-gray-300 transition-colors">
+                                    <p className="font-bold">{contact.username}</p>
+                                    <p className="text-sm text-gray-600">{contact.number}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -430,7 +448,7 @@ function Dashboard() {
                                             className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                                             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                                         >
-                                            <img src={emojiImg}></img>
+                                            <img src={emojiImg} alt="Emoji"></img>
                                         </button>
                                         <input
                                             className="flex-1 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-700 text-white"

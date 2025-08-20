@@ -117,12 +117,14 @@ router.get('/fetchmessages/:userId', async (req, res) => {
             include: {
                 sender: {
                     select: {
+                        id: true,
                         username: true,
                         number: true
                     }
                 },
                 receiver: {
                     select: {
+                        id: true,
                         username: true,
                         number: true
                     }
@@ -134,6 +136,58 @@ router.get('/fetchmessages/:userId', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });
+    }
+});
+
+// Get contacts for a user
+router.get('/contacts/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        
+        // Get all unique users that the current user has chatted with
+        const messages = await prisma.message.findMany({
+            where: {
+                OR: [
+                    { senderId: userId },
+                    { receiverId: userId }
+                ]
+            },
+            include: {
+                sender: {
+                    select: {
+                        id: true,
+                        username: true,
+                        number: true
+                    }
+                },
+                receiver: {
+                    select: {
+                        id: true,
+                        username: true,
+                        number: true
+                    }
+                }
+            }
+        });
+
+        // Extract unique contacts
+        const contactsMap = new Map();
+        
+        messages.forEach(message => {
+            if (message.sender.id !== userId) {
+                contactsMap.set(message.sender.id, message.sender);
+            }
+            if (message.receiver.id !== userId) {
+                contactsMap.set(message.receiver.id, message.receiver);
+            }
+        });
+
+        const contacts = Array.from(contactsMap.values());
+        res.status(200).json(contacts);
+
+    } catch (error) {
+        console.error("Error fetching contacts:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
