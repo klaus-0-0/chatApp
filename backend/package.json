@@ -1,9 +1,6 @@
 {
     "scripts": {
-<<<<<<< HEAD
         "build": "echo \"No build step required\"",
-=======
->>>>>>> c315ded58e0c915638eb4fee23844812234ec90d
         "postinstall": "prisma generate",
         "migrate:deploy": "prisma migrate deploy",
         "start": "node src/index.js"
