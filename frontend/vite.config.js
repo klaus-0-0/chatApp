@@ -6,10 +6,6 @@ export default defineConfig({
   server: {
     port: Number(process.env.PORT) || 5173,
     host: true,
-<<<<<<< HEAD
-    allowedHosts: ['whatsapp-32fo.onrender.com'], 
-=======
-    allowedHosts: ['whatsapp-32fo.onrender.com'], // add your domain here
->>>>>>> c315ded58e0c915638eb4fee23844812234ec90d
+    allowedHosts: ['whatsapp-32fo.onrender.com'], // keep only one line, remove <<<<<<< HEAD etc
   },
 })
