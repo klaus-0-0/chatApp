@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -23,13 +24,12 @@ router.post("/signup", async (req, res) => {
         if (number.length !== 10) {
             return res.status(400).json({ message: "Number must be 10 digits" });
         }
-
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await prisma.user.create({
             data: { username, number, password: hashedPassword }
         });
-
-        res.status(200).json({ message: "Signed up successfully", user: newUser });
+        const token = jwt.sign({ id: newUser.id }, process.env.TOKEN, { expiresIn: "1h" })
+        res.status(200).json({ message: "Signed up successfully", user: newUser, token });
 
     } catch (error) {
         console.error(error);
@@ -52,8 +52,8 @@ router.post('/login', async (req, res) => {
         if (!isPasswordValid) {
             return res.status(400).json({ message: "Invalid password" });
         }
-
-        res.status(200).json({ message: "Login succeeded", user });
+        const token = jwt.sign({ id: newUser.id }, process.env.TOKEN, { expiresIn: "1h" });
+        res.status(200).json({ message: "Login succeeded", user,token });
 
     } catch (error) {
         console.error(error);
