@@ -13,14 +13,14 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://whatsapp-32fo.onrender.com", // frontend
+    origin: "https://text-t.onrender.com", 
     methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
     credentials: true,
   },
 });
 
 app.use(cors({
-  origin: "https://whatsapp-32fo.onrender.com",
+  origin: "https://text-t.onrender.com",
   methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
   credentials: true,
 }));
