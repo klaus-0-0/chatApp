@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
-    allowedHosts: ['text-t.onrender.com'],
+    allowedHosts: ['https://text-t-xv44.onrender.com'],
   },
   build: {
     rollupOptions: {
