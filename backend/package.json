@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "build": "echo \"No build step required\"",
+        "build": "npm install",
         "postinstall": "prisma generate",
         "migrate:deploy": "prisma migrate deploy",
         "start": "node src/index.js"
