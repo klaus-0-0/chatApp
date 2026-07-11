@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "build": "npm install",
+        "build": "npm install && npx prisma migrate deploy",
         "postinstall": "prisma generate",
         "migrate:deploy": "prisma migrate deploy",
         "start": "node src/index.js"
